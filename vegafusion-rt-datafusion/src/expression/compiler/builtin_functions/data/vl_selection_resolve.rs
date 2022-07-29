@@ -13,6 +13,7 @@ use itertools::Itertools;
 use std::collections::HashMap;
 use std::convert::TryFrom;
 use std::str::FromStr;
+use vegafusion_core::arrow::datatypes::Field;
 use vegafusion_core::data::scalar::ScalarValueHelpers;
 use vegafusion_core::data::table::VegaFusionTable;
 use vegafusion_core::error::{Result, VegaFusionError};
@@ -129,7 +130,7 @@ pub fn vl_selection_resolve_fn(
                 .get(0)
                 .map(|s| s.get_datatype())
                 .unwrap_or(DataType::Float64);
-            let values = ScalarValue::List(Some(values), Box::new(dtype));
+            let values = ScalarValue::List(Some(values), Box::new(Field::new("item", dtype, true)));
             (name, values)
         })
         .sorted_by_key(|(n, _)| n.clone())

@@ -177,7 +177,7 @@ pub fn make_get_element_udf(index: i32) -> ScalarUDF {
         Ok(match arg {
             ColumnarValue::Scalar(value) => {
                 match value {
-                    ScalarValue::List(Some(arr), element_dtype) => {
+                    ScalarValue::List(Some(arr), element_field) => {
                         match arr.get(index as usize) {
                             Some(element) => {
                                 // Scalar element of list
@@ -186,7 +186,7 @@ pub fn make_get_element_udf(index: i32) -> ScalarUDF {
                             None => {
                                 // out of bounds, null
                                 ColumnarValue::Scalar(
-                                    ScalarValue::try_from(element_dtype.as_ref()).unwrap(),
+                                    ScalarValue::try_from(element_field.data_type()).unwrap(),
                                 )
                             }
                         }
@@ -229,9 +229,9 @@ pub fn make_get_element_udf(index: i32) -> ScalarUDF {
                             let el_start = offsets[i];
                             let el_stop = offsets[i + 1];
                             if el_start + index < el_stop {
-                                take_index_builder.append_value(el_start + index).unwrap();
+                                take_index_builder.append_value(el_start + index);
                             } else {
-                                take_index_builder.append_null().unwrap();
+                                take_index_builder.append_null();
                             }
                         }
 

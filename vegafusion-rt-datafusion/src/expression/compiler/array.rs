@@ -69,17 +69,15 @@ pub fn make_array_constructor_udf() -> ScalarUDF {
         let mut flat_valid_builder = BooleanBufferBuilder::new(num_rows * num_args);
         let mut offsets_builder = Int32Array::builder(num_rows + 1);
 
-        offsets_builder.append_value(0).unwrap();
+        offsets_builder.append_value(0);
 
         for r in 0..num_rows {
             for (a, arg) in args.iter().enumerate() {
                 let col_major_idx = (a * num_rows + r) as i32;
-                indices_builder.append_value(col_major_idx).unwrap();
+                indices_builder.append_value(col_major_idx);
                 flat_valid_builder.append(arg.is_valid(r));
             }
-            offsets_builder
-                .append_value((num_args * (r + 1)) as i32)
-                .unwrap();
+            offsets_builder.append_value((num_args * (r + 1)) as i32);
         }
 
         let flat_values = datafusion::arrow::compute::take(

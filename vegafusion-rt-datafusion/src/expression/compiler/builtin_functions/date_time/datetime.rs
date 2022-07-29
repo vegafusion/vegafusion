@@ -172,7 +172,7 @@ pub fn make_datetime_components_udf(input_tz: chrono_tz::Tz) -> ScalarUDF {
                     || milliseconds.is_null(i)
                 {
                     // If any component is null, propagate null
-                    datetime_builder.append_null().unwrap();
+                    datetime_builder.append_null();
                 } else {
                     let year = years.value(i);
                     let month = months.value(i);
@@ -203,12 +203,10 @@ pub fn make_datetime_components_udf(input_tz: chrono_tz::Tz) -> ScalarUDF {
                     if let Some(datetime) = datetime {
                         // Always convert to UTC
                         let datetime = datetime.with_timezone(&chrono::Utc);
-                        datetime_builder
-                            .append_value(datetime.timestamp_millis())
-                            .unwrap();
+                        datetime_builder.append_value(datetime.timestamp_millis());
                     } else {
                         // Invalid date
-                        datetime_builder.append_null().unwrap();
+                        datetime_builder.append_null();
                     }
                 }
             }

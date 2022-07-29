@@ -15,7 +15,7 @@ wasm-bindgen-futures = "0.4.28"
 js-sys = "0.3.55"
 prost = "0.10.3"
 prost-types = "0.10.1"
-indexmap = "=1.6.2"
+indexmap = "1.9.1"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.13"
@@ -29,7 +29,6 @@ features = [ "derive",]
 
 [dependencies.wasm-bindgen]
 version = "0.2.78"
-features = [ "serde-serialize",]
 
 [dependencies.getrandom]
 version = "0.2.3"

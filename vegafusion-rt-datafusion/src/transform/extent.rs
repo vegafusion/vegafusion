@@ -15,6 +15,7 @@ use datafusion::dataframe::DataFrame;
 use datafusion::logical_plan::{col, max, min};
 use datafusion::scalar::ScalarValue;
 use std::sync::Arc;
+use vegafusion_core::arrow::datatypes::Field;
 use vegafusion_core::error::Result;
 use vegafusion_core::proto::gen::transforms::Extent;
 use vegafusion_core::task_graph::task_value::TaskValue;
@@ -48,7 +49,7 @@ impl TransformTrait for Extent {
             let element_datatype = min_val_scalar.get_datatype();
             let extent_list = TaskValue::Scalar(ScalarValue::List(
                 Some(vec![min_val_scalar, max_val_scalar]),
-                Box::new(element_datatype),
+                Box::new(Field::new("item", element_datatype, true)),
             ));
             vec![extent_list]
         } else {

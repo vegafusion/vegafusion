@@ -21,7 +21,7 @@ use float_cmp::approx_eq;
 use std::sync::Arc;
 use vegafusion_core::arrow::array::{ArrayRef, Float64Array, Int64Array};
 use vegafusion_core::arrow::compute::unary;
-use vegafusion_core::arrow::datatypes::DataType;
+use vegafusion_core::arrow::datatypes::{DataType, Field};
 use vegafusion_core::data::scalar::ScalarValueHelpers;
 use vegafusion_core::error::{Result, ResultWithContext, VegaFusionError};
 
@@ -53,7 +53,7 @@ impl TransformTrait for Bin {
 
         let fields = ScalarValue::List(
             Some(vec![ScalarValue::from(self.field.as_str())]),
-            Box::new(DataType::Utf8),
+            Box::new(Field::new("item", DataType::Utf8, true)),
         );
         let output_value = if self.signal.is_some() {
             Some(TaskValue::Scalar(ScalarValue::from(vec![

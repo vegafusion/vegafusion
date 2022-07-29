@@ -56,9 +56,7 @@ pub fn make_length_udf() -> ScalarUDF {
                         let mut length_builder = Int32Array::builder(array.len());
 
                         for i in 0..array.len() {
-                            length_builder
-                                .append_value((offsets[i + 1] - offsets[i]) as i32)
-                                .unwrap();
+                            length_builder.append_value((offsets[i + 1] - offsets[i]) as i32);
                         }
 
                         ColumnarValue::Array(Arc::new(length_builder.finish()))

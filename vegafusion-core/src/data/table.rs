@@ -27,6 +27,7 @@ use crate::arrow::array::ArrayRef;
 use crate::data::json_writer::record_batches_to_json_rows;
 
 use arrow::array::StructArray;
+use arrow::datatypes::Field;
 use arrow::json::reader::DecoderOptions;
 use serde_json::{json, Value};
 
@@ -100,7 +101,10 @@ impl VegaFusionTable {
         if self.num_rows() == 0 {
             // Return empty list with (arbitrary) Float64 type
             let dtype = DataType::Float64;
-            return Ok(ScalarValue::List(Some(Vec::new()), Box::new(dtype)));
+            return Ok(ScalarValue::List(
+                Some(Vec::new()),
+                Box::new(Field::new("item", dtype, true)),
+            ));
         }
 
         let mut elements: Vec<ScalarValue> = Vec::new();
@@ -116,7 +120,10 @@ impl VegaFusionTable {
         }
 
         let dtype = elements[0].get_datatype();
-        Ok(ScalarValue::List(Some(elements), Box::new(dtype)))
+        Ok(ScalarValue::List(
+            Some(elements),
+            Box::new(Field::new("item", dtype, true)),
+        ))
     }
 
     pub fn to_json(&self) -> serde_json::Value {

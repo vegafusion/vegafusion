@@ -744,11 +744,11 @@ mod tests {
         let arr_names = StringArray::from(vec![Some("a"), Some("b")]);
 
         let schema = Schema::new(vec![
-            Field::new("nanos", arr_nanos.data_type().clone(), false),
-            Field::new("micros", arr_micros.data_type().clone(), false),
-            Field::new("millis", arr_millis.data_type().clone(), false),
-            Field::new("secs", arr_secs.data_type().clone(), false),
-            Field::new("name", arr_names.data_type().clone(), false),
+            Field::new("nanos", arr_nanos.data_type().clone(), true),
+            Field::new("micros", arr_micros.data_type().clone(), true),
+            Field::new("millis", arr_millis.data_type().clone(), true),
+            Field::new("secs", arr_secs.data_type().clone(), true),
+            Field::new("name", arr_names.data_type().clone(), true),
         ]);
         let schema = Arc::new(schema);
 
@@ -794,9 +794,9 @@ mod tests {
         let arr_names = StringArray::from(vec![Some("a"), Some("b")]);
 
         let schema = Schema::new(vec![
-            Field::new("date32", arr_date32.data_type().clone(), false),
-            Field::new("date64", arr_date64.data_type().clone(), false),
-            Field::new("name", arr_names.data_type().clone(), false),
+            Field::new("date32", arr_date32.data_type().clone(), true),
+            Field::new("date64", arr_date64.data_type().clone(), true),
+            Field::new("name", arr_names.data_type().clone(), true),
         ]);
         let schema = Arc::new(schema);
 
@@ -833,11 +833,11 @@ mod tests {
         let arr_names = StringArray::from(vec![Some("a"), Some("b")]);
 
         let schema = Schema::new(vec![
-            Field::new("time32sec", arr_time32sec.data_type().clone(), false),
-            Field::new("time32msec", arr_time32msec.data_type().clone(), false),
-            Field::new("time64usec", arr_time64usec.data_type().clone(), false),
-            Field::new("time64nsec", arr_time64nsec.data_type().clone(), false),
-            Field::new("name", arr_names.data_type().clone(), false),
+            Field::new("time32sec", arr_time32sec.data_type().clone(), true),
+            Field::new("time32msec", arr_time32msec.data_type().clone(), true),
+            Field::new("time64usec", arr_time64usec.data_type().clone(), true),
+            Field::new("time64nsec", arr_time64nsec.data_type().clone(), true),
+            Field::new("name", arr_names.data_type().clone(), true),
         ]);
         let schema = Arc::new(schema);
 
@@ -876,11 +876,11 @@ mod tests {
         let arr_names = StringArray::from(vec![Some("a"), Some("b")]);
 
         let schema = Schema::new(vec![
-            Field::new("duration_sec", arr_durationsec.data_type().clone(), false),
-            Field::new("duration_msec", arr_durationmsec.data_type().clone(), false),
-            Field::new("duration_usec", arr_durationusec.data_type().clone(), false),
-            Field::new("duration_nsec", arr_durationnsec.data_type().clone(), false),
-            Field::new("name", arr_names.data_type().clone(), false),
+            Field::new("duration_sec", arr_durationsec.data_type().clone(), true),
+            Field::new("duration_msec", arr_durationmsec.data_type().clone(), true),
+            Field::new("duration_usec", arr_durationusec.data_type().clone(), true),
+            Field::new("duration_nsec", arr_durationnsec.data_type().clone(), true),
+            Field::new("name", arr_names.data_type().clone(), true),
         ]);
         let schema = Arc::new(schema);
 
@@ -1012,7 +1012,7 @@ mod tests {
     fn write_nested_list() {
         let list_inner_type = Field::new(
             "a",
-            DataType::List(Box::new(Field::new("b", DataType::Int32, false))),
+            DataType::List(Box::new(Field::new("b", DataType::Int32, true))),
             false,
         );
         let field_c1 = Field::new(
@@ -1020,7 +1020,7 @@ mod tests {
             DataType::List(Box::new(list_inner_type.clone())),
             false,
         );
-        let field_c2 = Field::new("c2", DataType::Utf8, false);
+        let field_c2 = Field::new("c2", DataType::Utf8, true);
         let schema = Schema::new(vec![field_c1.clone(), field_c2]);
 
         // list column rows: [[1, 2], [3]], [], [[4, 5, 6]]

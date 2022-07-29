@@ -104,7 +104,12 @@ impl MsgReceiver {
         // Mount vega chart
         let window = web_sys::window().expect("no global `window` exists");
         let _document = window.document().expect("should have a document on window");
-        let dataflow = parse(JsValue::from_serde(&spec).unwrap());
+        let dataflow = parse(
+            js_sys::JSON::parse(
+                &serde_json::to_string(&spec).expect("Failed to parse spec as JSON"),
+            )
+            .unwrap(),
+        );
 
         let view = View::new(dataflow);
         view.initialize(element);
@@ -151,7 +156,9 @@ impl MsgReceiver {
                                     log(&format!("DataType: {:#?}", &value.get_datatype()));
                                 }
 
-                                let js_value = JsValue::from_serde(&json).unwrap();
+                                let js_value =
+                                    js_sys::JSON::parse(&serde_json::to_string(&json).unwrap())
+                                        .unwrap();
                                 set_signal_value(view, &var.name, scope.as_slice(), js_value);
                             }
                             TaskValue::Table(value) => {
@@ -162,7 +169,11 @@ impl MsgReceiver {
                                     log(&format!("Schema: {:#?}", &value.schema));
                                 }
 
-                                let js_value = JsValue::from_serde(&value.to_json()).unwrap();
+                                let js_value = js_sys::JSON::parse(
+                                    &serde_json::to_string(&value.to_json()).unwrap(),
+                                )
+                                .unwrap();
+
                                 set_data_value(view, &var.name, scope.as_slice(), js_value);
                             }
                         }
@@ -218,7 +229,10 @@ impl MsgReceiver {
             match scoped_var.0.namespace() {
                 VariableNamespace::Signal => {
                     let closure = Closure::wrap(Box::new(move |name: String, val: JsValue| {
-                        let val: serde_json::Value = val.into_serde().unwrap();
+                        let val: serde_json::Value = serde_json::from_str(
+                            &js_sys::JSON::stringify(&val).unwrap().as_string().unwrap(),
+                        )
+                        .unwrap();
                         if verbose {
                             log(&format!("VegaFusion(wasm): Sending signal {}", name));
                             log(&serde_json::to_string_pretty(&val).unwrap());
@@ -259,7 +273,10 @@ impl MsgReceiver {
                 }
                 VariableNamespace::Data => {
                     let closure = Closure::wrap(Box::new(move |name: String, val: JsValue| {
-                        let val: serde_json::Value = val.into_serde().unwrap();
+                        let val: serde_json::Value = serde_json::from_str(
+                            &js_sys::JSON::stringify(&val).unwrap().as_string().unwrap(),
+                        )
+                        .unwrap();
                         if verbose {
                             log(&format!("VegaFusion(wasm): Sending data {}", name));
                             log(&serde_json::to_string_pretty(&val).unwrap());
@@ -311,7 +328,9 @@ impl MsgReceiver {
         buf.reserve(request_msg.encoded_len());
         request_msg.encode(&mut buf).unwrap();
 
-        let context: JsValue = JsValue::from_serde(&serde_json::Value::Null).unwrap();
+        let context =
+            js_sys::JSON::parse(&serde_json::to_string(&serde_json::Value::Null).unwrap()).unwrap();
+
         let js_buffer = js_sys::Uint8Array::from(buf.as_slice());
         send_msg_fn
             .call2(&context, &js_buffer, &self.clone().into())

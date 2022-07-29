@@ -32,7 +32,7 @@ pub fn make_span_udf() -> ScalarUDF {
                         ColumnarValue::Scalar(ScalarValue::try_from(&DataType::Float64).unwrap())
                     }
                     ScalarValue::List(Some(arr), element_type) => {
-                        match element_type.as_ref() {
+                        match element_type.data_type() {
                             DataType::Float64 => {
                                 if arr.is_empty() {
                                     // Span of empty array is null

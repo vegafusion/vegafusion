@@ -51,14 +51,14 @@ pub fn inner_size_of_scalar(value: &ScalarValue) -> usize {
         ScalarValue::LargeUtf8(Some(s)) => size_of_val(s.as_bytes()) + size_of::<String>(),
         ScalarValue::Binary(Some(b)) => size_of_val(b.as_slice()) + size_of::<Vec<u8>>(),
         ScalarValue::LargeBinary(Some(b)) => size_of_val(b.as_slice()) + size_of::<Vec<u8>>(),
-        ScalarValue::List(Some(values), dtype) => {
+        ScalarValue::List(Some(values), field) => {
             let values_bytes: usize = size_of::<Vec<ScalarValue>>()
                 + values
                     .iter()
                     .map(|v| size_of::<ScalarValue>() + inner_size_of_scalar(v))
                     .sum::<usize>();
 
-            let dtype_bytes = size_of::<DataType>() + inner_size_of_dtype(dtype);
+            let dtype_bytes = size_of::<DataType>() + inner_size_of_dtype(field.data_type());
 
             values_bytes + dtype_bytes
         }

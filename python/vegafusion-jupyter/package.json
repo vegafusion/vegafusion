@@ -57,7 +57,8 @@
     "@jupyterlab/notebook": "^3.0.0 || ^4.0.0",
     "marked": "^4.0.10",
     "vega-lite": "^4.17.0",
-    "vegafusion-embed": "../../javascript/vegafusion-embed"
+    "vegafusion-embed": "../../javascript/vegafusion-embed",
+    "vegafusion-wasm": "../../vegafusion-wasm/pkg"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",

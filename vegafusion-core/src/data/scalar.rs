@@ -10,6 +10,7 @@ use crate::arrow::datatypes::DataType;
 use crate::error::{Result, VegaFusionError};
 pub use datafusion_common::ScalarValue;
 
+use arrow::datatypes::Field;
 use serde_json::{Map, Value};
 use std::convert::TryFrom;
 use std::ops::Deref;
@@ -73,7 +74,7 @@ impl ScalarValueHelpers for ScalarValue {
                     (elements, dtype)
                 };
 
-                ScalarValue::List(Some(elements), Box::new(dtype))
+                ScalarValue::List(Some(elements), Box::new(Field::new("item", dtype, true)))
             }
         };
         Ok(scalar_value)

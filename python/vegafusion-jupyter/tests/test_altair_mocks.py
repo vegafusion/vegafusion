@@ -248,7 +248,7 @@ def setup_module(module):
     ])
 def test_altair_mock(mock_name, img_tolerance, delay):
 
-    # Build Jupytext markdown text containing the mock's code
+    # Build Jupytext Markdown text containing the mock's code
     mock_path = altair_mocks_dir / mock_name / "mock.py"
     actions = load_actions(mock_name)
 
